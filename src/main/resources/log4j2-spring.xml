@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration monitorInterval="60">
+	<Properties>
+		<Property name="file-name-prefix">fusion-retry</Property>
+		<Property name="log-path">/tmp/fusion/retry</Property>
+		<Property name="LOG_EXCEPTION_CONVERSION_WORD">%xwEx</Property>
+		<Property name="LOG_LEVEL_PATTERN">%5p</Property>
+		<Property name="LOG_DATEFORMAT_PATTERN">yyyy-MM-dd HH:mm:ss.SSS</Property>
+		<Property name="FILE_LOG_PATTERN">%d{${LOG_DATEFORMAT_PATTERN}}	${LOG_LEVEL_PATTERN} --- [%t] %c : %m%n${sys:LOG_EXCEPTION_CONVERSION_WORD}
+		</Property>
+	</Properties>
+	<Appenders>
+		<RollingFile name="App-File-Appender"
+			fileName="${log-path}/${file-name-prefix}.log"
+			filePattern="${log-path}/${file-name-prefix}-%d{yyyy-MM-dd}-%i.log">
+			<PatternLayout>
+				<pattern>${FILE_LOG_PATTERN}</pattern>
+			</PatternLayout>
+
+			<Policies>
+				<SizeBasedTriggeringPolicy size="2 MB" />
+			</Policies>
+			<DefaultRolloverStrategy>
+				<Delete basePath="${log-path}">
+					<IfFileName glob="${file-name-prefix}-*.log" />
+					<IfLastModified age="30d" />
+				</Delete>
+			</DefaultRolloverStrategy>
+		</RollingFile>
+	</Appenders>
+	<Loggers>
+		<Logger name="com.scoperetail" level="TRACE" additivity="false">
+			<AppenderRef ref="App-File-Appender" />
+		</Logger>
+		<Logger name="com.alert" level="TRACE" additivity="false">
+			<AppenderRef ref="App-File-Appender" />
+		</Logger>
+		<logger name="org.springframework.boot.SpringApplication"
+			level="TRACE" additivity="false">
+			<appender-ref ref="App-File-Appender" />
+		</logger>
+		<Logger name="org.springframework.jdbc.core.JdbcTemplate"
+			level="TRACE" additivity="false">
+			<AppenderRef ref="App-File-Appender" />
+		</Logger>
+			<Logger name="org.zalando.logbook"
+			level="TRACE" additivity="false">
+			<AppenderRef ref="App-File-Appender" />
+		</Logger>
+		<Logger name="com.zaxxer.hikari" level="DEBUG"
+			additivity="false">
+			<AppenderRef ref="App-File-Appender" />
+		</Logger>
+		<Root level="ERROR">
+			<AppenderRef ref="App-File-Appender" />
+		</Root>
+	</Loggers>
+</Configuration>

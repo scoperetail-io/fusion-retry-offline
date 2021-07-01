@@ -1,0 +1,35 @@
+fusion:
+  retryPolicies:
+    - policyType: REALTIME
+      maxAttempt: 3
+      backoffMS: 1000
+      type: Fixed
+    - policyType: OFFLINE
+      maxAttempt: 5
+      backoffMS: 2000
+      type: Exponential
+      multiplierExpression: 5
+      brokerId: fusionBroker
+      queueName: OFFLINE_AUDIT_QUEUE
+      cronExpression: 0 0/1 * * * *
+spring:
+  datasource:
+    platform: mariadb
+    driverClassName: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb:failover://fusion-mariadb:3306/fusion?autoReconnect=true
+    username: fusion
+    password: fusion
+    timeBetweenEvictionRunsMillis: 1000
+    testWhileIdle: true
+  liquibase:
+    enabled: false
+  hikari:
+    connectionTimeout: 30000
+    idleTimeout: 30000
+    maxLifetime: 2000000
+    maximumPoolSize: 20
+    minimumIdle: 5
+    poolName: SpringBootJPAHikariCP
+  jpa:
+    ddl-auto: ''
+    show-sql: true
