@@ -1,4 +1,12 @@
 fusion:
+  brokers:
+    - channel: NA
+      hostUrl: 'tcp://127.0.0.1:61616'
+      brokerId: fusionBroker
+      jmsProvider: ACTIVEMQ
+      queueManagerName: NA
+      sendSessionCacheSize: 10
+      userName: admin
   retryPolicies:
     - policyType: REALTIME
       maxAttempt: 3
@@ -12,6 +20,47 @@ fusion:
       brokerId: fusionBroker
       queueName: OFFLINE_AUDIT_QUEUE
       cronExpression: '0 0/1 * * * *'
+  usecases:
+    - name: PICK_COMPLETE
+      version: 1
+      activeConfig: adapterConfig
+      configs:
+        - name: adapterConfig
+          adapters:
+            - adapterType: outbound
+              trasnportType: REST
+              usecaseResult: SUCCESS
+              brokerId: fusionBroker
+            - adapterType: outbound
+              trasnportType: JMS
+              usecaseResult: SUCCESS
+              brokerId: fusionBroker
+              queueName: FUSION.AUDIT.IN
+            - adapterType: outbound
+              trasnportType: JMS
+              usecaseResult: FAILURE
+              brokerId: fusionBroker
+              queueName: FUSION.PICK.END.OUTBOUND.ERROR
+    - name: PICK_BEGIN
+      version: 1
+      activeConfig: adapterConfig
+      configs:
+        - name: adapterConfig
+          adapters:
+            - adapterType: outbound
+              trasnportType: REST
+              usecaseResult: SUCCESS
+              brokerId: fusionBroker
+            - adapterType: outbound
+              trasnportType: JMS
+              usecaseResult: SUCCESS
+              brokerId: fusionBroker
+              queueName: FUSION.AUDIT.IN
+            - adapterType: outbound
+              trasnportType: JMS
+              usecaseResult: FAILURE
+              brokerId: fusionBroker
+              queueName: FUSION.PICK.BEGIN.OUTBOUND.ERROR
 spring:
   datasource:
     platform: mariadb

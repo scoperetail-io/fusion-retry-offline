@@ -1,19 +1,17 @@
 package com.scoperetail.fusion.retry.offline.application;
 
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.scoperetail.fusion.core.adapter.out.web.http.PosterOutboundHttpOfflineAdapter;
-import com.scoperetail.fusion.core.common.JsonUtils;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.scoperetail.fusion.messaging.config.FusionConfig;
 import com.scoperetail.fusion.messaging.config.RetryPolicy;
+import com.scoperetail.fusion.retry.offline.application.port.in.command.create.OrderDropUseCase;
+import com.scoperetail.fusion.retry.offline.common.JsonUtils;
 import com.scoperetail.fusion.retry.persistence.entity.RetryLogEntity;
 import com.scoperetail.fusion.retry.persistence.repository.RetryLogRepository;
 
@@ -22,23 +20,22 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Slf4j
 public class OfflineScheduler {
-	private static final String COMPLETE = "C";
 	private static final String INCOMPLETE = "I";
 
-	private RetryLogRepository retryLogRepository;
-	private PosterOutboundHttpOfflineAdapter posterOutboundHttpOfflineAdapter;
-	private FusionConfig fusionConfig;
+	private final RetryLogRepository retryLogRepository;
+	private final FusionConfig fusionConfig;
+	private final OrderDropUseCase orderDropUseCase;
 
-	public OfflineScheduler(RetryLogRepository retryLogRepository,
-			PosterOutboundHttpOfflineAdapter posterOutboundHttpOfflineAdapter, FusionConfig fusionConfig) {
+	public OfflineScheduler(RetryLogRepository retryLogRepository, FusionConfig fusionConfig,
+			OrderDropUseCase orderDropUseCase) {
 		super();
 		this.retryLogRepository = retryLogRepository;
-		this.posterOutboundHttpOfflineAdapter = posterOutboundHttpOfflineAdapter;
 		this.fusionConfig = fusionConfig;
+		this.orderDropUseCase = orderDropUseCase;
 	}
 
 	@Scheduled(fixedDelayString = "#{${fusion.retryPolicies[1].backoffMS}}")
-	public void processIncompleteAttempts() throws IOException {
+	public void processIncompleteAttempts() throws Exception {
 		final Optional<RetryPolicy> retryPolicyOpt = fusionConfig.getRetryPolicies().stream()
 				.filter(p -> p.getPolicyType().equals(RetryPolicy.PolicyType.OFFLINE)).findFirst();
 
@@ -50,20 +47,14 @@ public class OfflineScheduler {
 
 			for (RetryLogEntity itemRetryLog : retryLogs) {
 
-				Map<String, String> headers = JsonUtils.unmarshal(Optional.ofNullable(itemRetryLog.getHeaders()),
-						HashMap.class.getCanonicalName());
+				List<Map<String, Object>> eventMap = JsonUtils.unmarshal(Optional.ofNullable(itemRetryLog.getPayload()),
+						Optional.ofNullable(new TypeReference<List<Map<String, Object>>>() {
+						}));
 
-				ResponseEntity<String> response = posterOutboundHttpOfflineAdapter.post(itemRetryLog.getUrl(),
-						itemRetryLog.getMethodType(), itemRetryLog.getPayload(), headers);
+				String eventName = eventMap.stream().findFirst().get().get("eventName").toString();
 
-				if (response != null) {
-					retryLogRepository.updateStatusByRetryKey(itemRetryLog.getRetryKey(), COMPLETE);
-					log.trace("REST request sent to URL: {} and Response received is: {}", itemRetryLog.getUrl(),
-							response);
-				} else {
-					retryLogRepository.increasingAttempts(itemRetryLog.getRetryKey());
-					log.error("On recover after post failed. message: {}", itemRetryLog.getPayload());
-				}
+				orderDropUseCase.dropOrder(eventName, itemRetryLog);
+
 			}
 		}
 	}
