@@ -7,18 +7,35 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.5.2</version>
-		<relativePath /> <!-- lookup parent from repository -->
+		<relativePath />
 	</parent>
+
 	<groupId>com.scoperetail</groupId>
 	<artifactId>fusion-retry-offline</artifactId>
 	<version>0.1-SNAPSHOT</version>
 	<name>fusion-retry-offline</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Offline REST services retry</description>
 
 	<properties>
 		<java.version>11</java.version>
 		<fusion.core.version>0.12-SNAPSHOT</fusion.core.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<lombok.version>1.18.12</lombok.version>
+		<sonar.host.url>http://dev-ops.eastus2.cloudapp.azure.com/sonar/</sonar.host.url>
+		<sonar.login>scoperetail</sonar.login>
+		<sonar.password>scope2020!</sonar.password>
+		<sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
+		<sonar.jacoco.reportPath>${project.basedir}/target/jacoco.exec</sonar.jacoco.reportPath>
+		<sonar.language>java</sonar.language>
+		<spotless.version>2.10.0</spotless.version>
 	</properties>
+
+	<scm>
+		<developerConnection>
+			scm:git:git@github.com:scoperetail-io/${project.artifactId}.git
+		</developerConnection>
+		<tag>HEAD</tag>
+	</scm>
 
 	<dependencies>
 		<dependency>
@@ -44,8 +61,127 @@
 					</annotationProcessorPaths>
 					<generatedSourcesDirectory>${project.build.directory}/generated-sources</generatedSourcesDirectory>
 
+					<layers>
+						<enabled>true</enabled>
+						<configuration>${project.basedir}/src/layers.xml</configuration>
+					</layers>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.5.3</version>
+				<configuration>
+					<scmCommentPrefix>[skip ci]</scmCommentPrefix>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.2</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>report</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>com.diffplug.spotless</groupId>
+				<artifactId>spotless-maven-plugin</artifactId>
+				<version>${spotless.version}</version>
+				<configuration>
+					<!-- optional: limit format enforcement to just the files changed by this feature branch -->
+					<ratchetFrom>origin/master</ratchetFrom>
+					<formats>
+						<!-- you can define as many formats as you want, each is independent -->
+						<format>
+							<!-- define the files to apply to -->
+							<includes>
+								<include>*.md</include>
+								<include>.gitignore</include>
+							</includes>
+							<!-- define the steps to apply to those files -->
+							<trimTrailingWhitespace />
+							<endWithNewline />
+							<indent>
+								<tabs>true</tabs>
+								<spacesPerTab>4</spacesPerTab>
+							</indent>
+						</format>
+					</formats>
+					<!-- define a language-specific format -->
+					<java>
+						<!-- no need to specify files, inferred automatically, but you can if you want -->
+
+						<!-- apply a specific flavor of google-java-format -->
+						<googleJavaFormat>
+							<version>1.8</version>
+							<style>GOOGLE</style>
+						</googleJavaFormat>
+
+						<!-- make sure every file has the following copyright header.
+              optionally, Spotless can set copyright years by digging
+              through git history (see "license" section below) -->
+						<licenseHeader>
+							<content>/* ScopeRetail (C)$YEAR */</content>  <!-- or <file>${basedir}/license-header</file> -->
+						</licenseHeader>
+					</java>
 				</configuration>
 			</plugin>
 		</plugins>
 	</build>
+
+	<repositories>
+		<repository>
+			<id>spring-milestones</id>
+			<name>Spring Milestones</name>
+			<url>https://repo.spring.io/milestone</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>central</id>
+			<name>scope-artifactory-virtual</name>
+			<url>http://scopeartifactory.centralus.cloudapp.azure.com/artifactory/maven-virtual</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>maven-central</id>
+			<name>maven</name>
+			<url>https://repo.maven.apache.org/maven2/</url>
+		</repository>
+		<repository>
+			<id>jcenter-central</id>
+			<name>bintray-plugins</name>
+			<url>https://jcenter.bintray.com</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+
+	<distributionManagement>
+		<repository>
+			<id>central</id>
+			<name>scope-artifactory-releases</name>
+			<url>http://scopeartifactory.centralus.cloudapp.azure.com/artifactory/maven-release</url>
+		</repository>
+		<snapshotRepository>
+			<id>snapshots</id>
+			<name>scope-artifactory-snapshots</name>
+			<url>http://scopeartifactory.centralus.cloudapp.azure.com/artifactory/maven-snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
 </project>
