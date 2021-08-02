@@ -1,17 +1,20 @@
 fusion:
-  retryPolicies:
-    - policyType: REALTIME
-      maxAttempt: 3
-      backoffMS: 1000
-      type: Fixed
-    - policyType: OFFLINE
-      maxAttempt: 5
-      backoffMS: 60000
-      type: Exponential
-      multiplierExpression: 5
+  brokers:
+    - channel: NA
+      hostUrl: 'tcp://127.0.0.1:61616'
       brokerId: fusionBroker
-      queueName: OFFLINE_AUDIT_QUEUE
-      cronExpression: '0 0/1 * * * *'
+      jmsProvider: ACTIVEMQ
+      queueManagerName: NA
+      sendSessionCacheSize: 10
+      userName: admin
+      amqpRedeliveryPolicy:
+         backOffMultiplier: 1.0
+         maxDeliveries: 3
+         queueNameRegex: "*"
+         redeliveryDelay: 3000
+         useExponentialBackOff: true
+         maxDeliveryDelay: 3600000
+         initialRedeliveryDelay: 0
 spring:
   datasource:
     platform: mariadb
