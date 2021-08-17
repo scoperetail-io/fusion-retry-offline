@@ -18,7 +18,7 @@
 
 	<properties>
 		<java.version>11</java.version>
-		<fusion.core.version>0.14-SNAPSHOT</fusion.core.version>
+		<fusion.core.version>0.14</fusion.core.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<lombok.version>1.18.12</lombok.version>
 		<sonar.host.url>http://dev-ops.eastus2.cloudapp.azure.com/sonar/</sonar.host.url>
