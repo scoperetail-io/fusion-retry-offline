@@ -10,7 +10,7 @@
 
 	<groupId>com.scoperetail</groupId>
 	<artifactId>fusion-retry-offline</artifactId>
-	<version>0.3-SNAPSHOT</version>
+	<version>0.3</version>
 	<name>fusion-retry-offline</name>
 	<description>Offline REST services retry</description>
 	<url>https://github.com/scoperetail-io/${project.artifactId}</url>
@@ -25,7 +25,7 @@
 		<developerConnection>
             scm:git:git@github.com:scoperetail-io/${project.artifactId}.git
         </developerConnection>
-		<tag>HEAD</tag>
+		<tag>fusion-retry-offline-0.3</tag>
 		<url>https://github.com/scoperetail-io/${project.artifactId}</url>
 	</scm>
 
