@@ -27,3 +27,25 @@ fusion:
               brokerId: fusionBroker
               queueName: ORDER.CREATE.RETRY.IN
               messageType: JSON
+    - name: RestRetryPickBegin
+      version: 1
+      activeConfig: adapterConfig
+      configs:
+        - name: adapterConfig
+          adapters:
+            - adapterType: inbound
+              brokerId: fusionBroker
+              queueName: US.FUSION.ALPHA.RETRY.IN
+              readConcurrency: 1-1
+              messageType: JSON
+    - name: RestRetryPickEnd
+      version: 1
+      activeConfig: adapterConfig
+      configs:
+        - name: adapterConfig
+          adapters:
+            - adapterType: inbound
+              brokerId: fusionBroker
+              queueName: US.FUSION.ALPHA.RETRY.IN
+              readConcurrency: 1-1
+              messageType: JSON                             
