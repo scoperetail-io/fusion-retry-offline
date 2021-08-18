@@ -1,4 +1,4 @@
-package com.scoperetail.fusion.retry.offline;
+package com.scoperetail.fusion.retry.offline.config;
 
 /*-
  * *****
@@ -26,13 +26,13 @@ package com.scoperetail.fusion.retry.offline;
  * =====
  */
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import com.scoperetail.fusion.core.FusionCoreConfig;
 
-@SpringBootApplication
-public class FusionRetryOfflineApplication {
-
-  public static void main(final String[] args) {
-    SpringApplication.run(FusionRetryOfflineApplication.class, args);
-  }
-}
+@Configuration
+@Import({FusionCoreConfig.class})
+@EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class})
+public class FusionRetryOfflineConfig {}

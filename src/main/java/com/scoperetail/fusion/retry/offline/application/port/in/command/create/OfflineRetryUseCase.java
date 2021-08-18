@@ -1,4 +1,4 @@
-package com.scoperetail.fusion.retry.offline;
+package com.scoperetail.fusion.retry.offline.application.port.in.command.create;
 
 /*-
  * *****
@@ -12,10 +12,10 @@ package com.scoperetail.fusion.retry.offline;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,13 +26,11 @@ package com.scoperetail.fusion.retry.offline;
  * =====
  */
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+public interface OfflineRetryUseCase {
 
-@SpringBootApplication
-public class FusionRetryOfflineApplication {
+  void doValidationFailure(String event, String message);
 
-  public static void main(final String[] args) {
-    SpringApplication.run(FusionRetryOfflineApplication.class, args);
-  }
+  void retryOffline(Object message) throws Exception;
+
+  void shutDownApplication();
 }
