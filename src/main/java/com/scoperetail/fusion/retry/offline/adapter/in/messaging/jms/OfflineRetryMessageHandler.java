@@ -1,4 +1,4 @@
-package com.scoperetail.fusion.retry.offline.application.service.command;
+package com.scoperetail.fusion.retry.offline.adapter.in.messaging.jms;
 
 /*-
  * *****
@@ -12,10 +12,10 @@ package com.scoperetail.fusion.retry.offline.application.service.command;
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -27,30 +27,39 @@ package com.scoperetail.fusion.retry.offline.application.service.command;
  */
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
+import com.scoperetail.fusion.config.FusionConfig;
+import com.scoperetail.fusion.core.adapter.in.messaging.jms.AbstractMessageListener;
+import com.scoperetail.fusion.messaging.adapter.out.messaging.jms.MessageRouterReceiver;
 import com.scoperetail.fusion.retry.offline.application.port.in.command.create.OfflineRetryUseCase;
-import lombok.extern.slf4j.Slf4j;
 
-@Service
-@Slf4j
-public class ApplicationTimeoutWatchdog {
+@Component
+public class OfflineRetryMessageHandler extends AbstractMessageListener {
+  private final OfflineRetryUseCase offlineRetryUseCase;
+  private final String usecase;
 
-  public ApplicationTimeoutWatchdog(
-      @Value("${timeOutInSeconds}") final long timeOutInSeconds,
+  public OfflineRetryMessageHandler(
+      @Value("${usecase}") final String usecase,
+      final FusionConfig fusionConfig,
+      final MessageRouterReceiver messageRouterReceiver,
       final OfflineRetryUseCase offlineRetryUseCase) {
-    timeout(timeOutInSeconds, offlineRetryUseCase);
+    super(usecase, null, messageRouterReceiver, fusionConfig);
+    this.usecase = usecase;
+    this.offlineRetryUseCase = offlineRetryUseCase;
   }
 
-  private void timeout(final long timeOutInSeconds, final OfflineRetryUseCase offlineRetryUseCase) {
-    new Thread(
-            () -> {
-              try {
-                Thread.sleep(timeOutInSeconds * 1000);
-                offlineRetryUseCase.shutDownApplication();
-              } catch (final InterruptedException e) {
-                log.error("Exception occured: {}", e);
-              }
-            })
-        .start();
+  @Override
+  public void handleValidationFailure(final String message) throws Exception {
+    offlineRetryUseCase.doValidationFailure(usecase, message);
+  }
+
+  @Override
+  public void handleMessage(final Object event) throws Exception {
+    offlineRetryUseCase.retryOffline(event);
+  }
+
+  @Override
+  public void handleFailure(final String message) {
+    offlineRetryUseCase.shutDownApplication();
   }
 }
