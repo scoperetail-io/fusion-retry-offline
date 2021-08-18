@@ -28,7 +28,9 @@ workflows:
       - marvel/maven-release-docker:
           context:
             - OSSRH
+            - DOCKER_SCOPERETAIL
             - SLACK
+            - ARTIFACTORY
           filters:
             branches:
               only:
