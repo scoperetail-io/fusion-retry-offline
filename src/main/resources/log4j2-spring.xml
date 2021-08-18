@@ -27,25 +27,35 @@
 				</Delete>
 			</DefaultRolloverStrategy>
 		</RollingFile>
+		<Console name="App-Console-Appender" target="SYSTEM_OUT">
+			<PatternLayout>
+				<Pattern>${FILE_LOG_PATTERN}</Pattern>
+			</PatternLayout>
+		</Console>
 	</Appenders>
 	<Loggers>
 		<Logger name="com.scoperetail" level="TRACE" additivity="false">
 			<AppenderRef ref="App-File-Appender" />
+			<AppenderRef ref="App-Console-Appender"/>
 		</Logger>
 		<Logger name="com.alert" level="TRACE" additivity="false">
 			<AppenderRef ref="App-File-Appender" />
+			<AppenderRef ref="App-Console-Appender"/>
 		</Logger>
 		<logger name="org.springframework.boot.SpringApplication"
 			level="TRACE" additivity="false">
 			<appender-ref ref="App-File-Appender" />
+			<AppenderRef ref="App-Console-Appender"/>
 		</logger>
 		<Logger name="org.springframework.jdbc.core.JdbcTemplate"
 			level="TRACE" additivity="false">
 			<AppenderRef ref="App-File-Appender" />
+			<AppenderRef ref="App-Console-Appender"/>
 		</Logger>
 			<Logger name="org.zalando.logbook"
 			level="TRACE" additivity="false">
 			<AppenderRef ref="App-File-Appender" />
+			<AppenderRef ref="App-Console-Appender"/>
 		</Logger>
 		<Logger name="com.zaxxer.hikari" level="DEBUG"
 			additivity="false">
@@ -53,6 +63,7 @@
 		</Logger>
 		<Root level="ERROR">
 			<AppenderRef ref="App-File-Appender" />
+			<AppenderRef ref="App-Console-Appender"/>
 		</Root>
 	</Loggers>
 </Configuration>
