@@ -9,7 +9,7 @@ fusion:
       userName: admin
       amqpRedeliveryPolicy:
          backOffMultiplier: 1.0
-         maxDeliveries: 3
+         maxDeliveries: -1
          queueNameRegex: "*"
          redeliveryDelay: 3000
          useExponentialBackOff: true

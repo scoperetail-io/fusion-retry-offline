@@ -16,7 +16,7 @@
 	<url>https://github.com/scoperetail-io/${project.artifactId}</url>
 
 	<properties>
-		<fusion.core.version>0.14</fusion.core.version>
+		<fusion.core.version>0.17</fusion.core.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<lombok.version>1.18.12</lombok.version>
 	</properties>
