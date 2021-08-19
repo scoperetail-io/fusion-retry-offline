@@ -60,6 +60,6 @@ public class OfflineRetryMessageHandler extends AbstractMessageListener {
 
   @Override
   public void handleFailure(final String message) {
-    offlineRetryUseCase.shutDownApplication();
+    //offlineRetryUseCase.shutDownApplication();
   }
 }
