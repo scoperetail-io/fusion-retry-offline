@@ -19,6 +19,7 @@
 		<fusion.core.version>0.17</fusion.core.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<lombok.version>1.18.12</lombok.version>
+		<jackson.version>2.11.4</jackson.version>
 	</properties>
 
 	<scm>
@@ -51,6 +52,16 @@
 			<groupId>com.scoperetail.fusion</groupId>
 			<artifactId>fusion-core</artifactId>
 			<version>${fusion.core.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-jsr310</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>${jackson.version}</version>
 		</dependency>
 	</dependencies>
 
