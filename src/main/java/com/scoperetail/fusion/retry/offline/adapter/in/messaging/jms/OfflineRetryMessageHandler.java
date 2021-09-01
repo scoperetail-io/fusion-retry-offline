@@ -30,6 +30,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import com.scoperetail.fusion.config.FusionConfig;
 import com.scoperetail.fusion.core.adapter.in.messaging.jms.AbstractMessageListener;
+import com.scoperetail.fusion.core.application.port.in.command.AuditUseCase;
 import com.scoperetail.fusion.messaging.adapter.out.messaging.jms.MessageRouterReceiver;
 import com.scoperetail.fusion.retry.offline.application.port.in.command.create.OfflineRetryUseCase;
 
@@ -42,8 +43,9 @@ public class OfflineRetryMessageHandler extends AbstractMessageListener {
       @Value("${usecase}") final String usecase,
       final FusionConfig fusionConfig,
       final MessageRouterReceiver messageRouterReceiver,
-      final OfflineRetryUseCase offlineRetryUseCase) {
-    super(usecase, null, messageRouterReceiver, fusionConfig);
+      final OfflineRetryUseCase offlineRetryUseCase,
+      final AuditUseCase auditUseCase) {
+    super(usecase, null, messageRouterReceiver, fusionConfig, auditUseCase);
     this.usecase = usecase;
     this.offlineRetryUseCase = offlineRetryUseCase;
   }
