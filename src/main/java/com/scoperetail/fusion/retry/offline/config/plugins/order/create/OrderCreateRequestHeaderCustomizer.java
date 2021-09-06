@@ -35,6 +35,6 @@ public class OrderCreateRequestHeaderCustomizer {
 
   public static void applyCustomization(final HttpRequest httpRequest) {
     final Map<String, String> httpHeaders = httpRequest.getHttpHeaders();
-    httpHeaders.put("CUSTOM_HEADER", "customer-header");
+    httpHeaders.put("CUSTOM_HEADER", "custom-header");
   }
 }
