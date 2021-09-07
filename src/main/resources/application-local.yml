@@ -17,7 +17,7 @@ fusion:
          initialRedeliveryDelay: 0
          
   usecases:
-    - name: RestRetryPickBegin
+    - name: OrderCreateRetry
       version: 1
       activeConfig: adapterConfig
       configs:
@@ -25,27 +25,11 @@ fusion:
           adapters:
             - adapterType: inbound
               brokerId: fusionBroker
-              queueName: US.FUSION.ALPHA.RETRY.IN
+              queueName: ORDER.CREATE.RETRY.IN
               readConcurrency: 1-1
               messageType: JSON
             - adapterType: outbound
               trasnportType: JMS
               usecaseResult: FAILURE
               brokerId: fusionBroker
-              queueName: US.FUSION.ALPHA.RETRY.IN.ERROR.QUEUE              
-    - name: RestRetryPickEnd
-      version: 1
-      activeConfig: adapterConfig
-      configs:
-        - name: adapterConfig
-          adapters:
-            - adapterType: inbound
-              brokerId: fusionBroker
-              queueName: US.FUSION.ALPHA.RETRY.IN
-              readConcurrency: 1-1
-              messageType: JSON 
-            - adapterType: outbound
-              trasnportType: JMS
-              usecaseResult: FAILURE
-              brokerId: fusionBroker
-              queueName: US.FUSION.ALPHA.RETRY.IN.ERROR.QUEUE                                            
+              queueName: ORDER.CREATE.RETRY.IN.ERROR.QUEUE
