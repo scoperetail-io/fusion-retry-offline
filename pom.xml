@@ -10,13 +10,13 @@
 
 	<groupId>com.scoperetail</groupId>
 	<artifactId>fusion-retry-offline</artifactId>
-	<version>0.10-SNAPSHOT</version>
+	<version>0.11-SNAPSHOT</version>
 	<name>fusion-retry-offline</name>
 	<description>Offline REST services retry</description>
 	<url>https://github.com/scoperetail-io/${project.artifactId}</url>
 
 	<properties>
-		<fusion.core.version>0.19</fusion.core.version>
+		<fusion.core.version>0.21</fusion.core.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<lombok.version>1.18.12</lombok.version>
 		<jackson.version>2.11.4</jackson.version>
