@@ -31,12 +31,12 @@ import java.lang.reflect.Method;
 import java.util.Optional;
 import com.scoperetail.fusion.core.adapter.out.web.http.PosterOutboundHttpAdapter;
 import com.scoperetail.fusion.core.application.port.in.command.create.PosterUseCase;
-import com.scoperetail.fusion.core.common.HttpRequest;
-import com.scoperetail.fusion.core.common.HttpRequestWrapper;
 import com.scoperetail.fusion.core.common.JsonUtils;
 import com.scoperetail.fusion.retry.offline.application.port.in.command.create.OfflineRetryUseCase;
 import com.scoperetail.fusion.retry.offline.common.helper.ApplicationShutdownHelper;
 import com.scoperetail.fusion.shared.kernel.common.annotation.UseCase;
+import com.scoperetail.fusion.shared.kernel.web.request.HttpRequest;
+import com.scoperetail.fusion.shared.kernel.web.request.HttpRequestWrapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

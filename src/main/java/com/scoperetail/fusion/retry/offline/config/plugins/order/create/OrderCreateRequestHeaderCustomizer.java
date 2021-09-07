@@ -27,7 +27,7 @@ package com.scoperetail.fusion.retry.offline.config.plugins.order.create;
  */
 
 import java.util.Map;
-import com.scoperetail.fusion.core.common.HttpRequest;
+import com.scoperetail.fusion.shared.kernel.web.request.HttpRequest;
 
 public class OrderCreateRequestHeaderCustomizer {
 
