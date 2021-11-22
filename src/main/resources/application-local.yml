@@ -25,11 +25,11 @@ fusion:
           adapters:
             - adapterType: inbound
               brokerId: fusionBroker
-              queueName: ORDER.CREATE.RETRY.IN
+              queueName: US.FUSION.ALPHA.RETRY.IN
               readConcurrency: 1-1
               messageType: JSON
             - adapterType: outbound
               trasnportType: JMS
               usecaseResult: FAILURE
               brokerId: fusionBroker
-              queueName: ORDER.CREATE.RETRY.IN.ERROR.QUEUE
+              queueName: US.FUSION.ALPHA.RETRY.IN.ERROR.QUEUE
