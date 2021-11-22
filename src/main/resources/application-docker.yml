@@ -32,6 +32,6 @@ fusion:
               trasnportType: JMS
               usecaseResult: FAILURE
               brokerId: fusionBroker
-              queueName: ${ORDER_CREATE_RETRY_IN_ERROR.QUEUE}
+              queueName: ${ORDER_CREATE_RETRY_IN_ERROR_QUEUE}
 usecase: ${USECASE}
 timeOutInSeconds: ${TIME_OUT_IN_SECONDS}
